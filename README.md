@@ -47,3 +47,8 @@ The tools chosen and featured during this course are **100% free and most of the
 
 Visit **[the course page](https://talkpython.fm/mongodb-async)** to get started on this 7hr video course.
 
+Mongodb
+mongodb://user:password@127.0.0.1:27017
+
+MOngosh
+docker container run -it --name mongosh_async --network mongodb-for-async-python_app-network mongodb/mongodb-community-server:7.0.0-ubi8 mongosh mongodb://user:password@mongo_db:27017

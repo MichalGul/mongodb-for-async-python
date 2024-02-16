@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  mongo_db:
+    image: mongodb/mongodb-community-server:7.0.0-ubi8
+    ports:
+      - "27099:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=user
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes:
+      # - db_data:/data/db
+      #or use bind to have data in given path in source
+      - type: bind
+        source: ./data
+        target: /data/db
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks:
+      - app-network
+
+networks:
+  app-network:
+
+
+volumes:
+  db_data:
+    driver: local
