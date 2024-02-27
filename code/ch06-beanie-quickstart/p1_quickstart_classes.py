@@ -29,7 +29,7 @@ class Location(pydantic.BaseModel):
 class User(pydantic.BaseModel):  # beanie.Document):
     name: str
     email: str
-    password_hash: Optional[str]
+    password_hash: Optional[str] = None
 
     created_date: datetime.datetime = pydantic.Field(default_factory=datetime.datetime.now)
     last_login: datetime.datetime = pydantic.Field(default_factory=datetime.datetime.now)

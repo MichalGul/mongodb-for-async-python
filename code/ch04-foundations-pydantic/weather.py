@@ -74,4 +74,4 @@ data = {
 report = WeatherModel(**data)
 
 print("The weather is now:")
-print(report.forecast)
+print(report)

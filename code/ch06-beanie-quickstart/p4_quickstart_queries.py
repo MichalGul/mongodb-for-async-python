@@ -13,15 +13,15 @@ import pydantic
 
 async def main():
     await init_connection('beanie_quickstart')
-    await create_a_user()
-    await insert_multiple_users()
+    # await create_a_user()
+    # await insert_multiple_users()
     await find_some_users()
 
     print("Done.")
 
 
 async def init_connection(db_name: str):
-    conn_str = f"mongodb://localhost:27017/{db_name}"
+    conn_str = f"mongodb://user:password@127.0.0.1:27099/{db_name}?authSource=admin"
     client = motor.motor_asyncio.AsyncIOMotorClient(conn_str)
 
     await beanie.init_beanie(database=client[db_name], document_models=[User])
@@ -69,11 +69,11 @@ async def find_some_users():
     # noinspection PyUnresolvedReferences
     users: list[User] = await User \
         .find(User.location.country == 'USA') \
-        .find(User.name == 'Michael') \
         .sort(-User.name) \
         .to_list()
 
     for u in users:
+        print("Users in USA")
         print(u.name)
 
     # noinspection PyUnresolvedReferences
@@ -87,7 +87,7 @@ async def find_some_users():
 
 
 class Location(pydantic.BaseModel):
-    city: Optional[str]
+    city: Optional[str] = None
     state: str
     country: str
 
@@ -95,12 +95,20 @@ class Location(pydantic.BaseModel):
 class User(beanie.Document):
     name: str
     email: str
-    password_hash: Optional[str]
+    password_hash: Optional[str] = None
 
     created_date: datetime.datetime = pydantic.Field(default_factory=datetime.datetime.now)
     last_login: datetime.datetime = pydantic.Field(default_factory=datetime.datetime.now)
 
     location: Location
+
+    # Customize MongoDB collections
+    class Settings:
+        name = "users"
+        indexes = [
+            "location.country"
+        ]
+
 
 
 if __name__ == '__main__':

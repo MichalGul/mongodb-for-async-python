@@ -20,7 +20,7 @@ async def main():
 
 
 async def init_connection(db_name: str):
-    conn_str = f"mongodb://localhost:27017/{db_name}"
+    conn_str = f"mongodb://user:password@127.0.0.1:27099/{db_name}?authSource=admin"
     client = motor.motor_asyncio.AsyncIOMotorClient(conn_str)
 
     await beanie.init_beanie(database=client[db_name], document_models=[User])
@@ -64,7 +64,7 @@ async def insert_multiple_users():
 
 
 class Location(pydantic.BaseModel):
-    city: Optional[str]
+    city: Optional[str] = None
     state: str
     country: str
 
@@ -72,7 +72,7 @@ class Location(pydantic.BaseModel):
 class User(beanie.Document):
     name: str
     email: str
-    password_hash: Optional[str]
+    password_hash: Optional[str] = None
 
     created_date: datetime.datetime = pydantic.Field(default_factory=datetime.datetime.now)
     last_login: datetime.datetime = pydantic.Field(default_factory=datetime.datetime.now)
