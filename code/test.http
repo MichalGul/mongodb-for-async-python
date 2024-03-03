@@ -1,0 +1,23 @@
+### GET request with a header
+GET http://127.0.0.1:8000/hello
+Accept: application/json
+
+
+### GET request with a header
+GET http://127.0.0.1:8000/api/packages/recent/3
+Accept: application/json
+
+
+### GET request with a header
+GET http://127.0.0.1:8000/api/packages/details/beanie
+Accept: application/json
+
+### GET request with a header
+GET http://127.0.0.1:8000/api/packages/recent/5
+Accept: application/json
+
+### GET request with a header
+GET http://127.0.0.1:8000/api/stats
+Accept: application/json
+
+

@@ -1,6 +1,5 @@
 import datetime
-
-
+from typing import Optional
 
 from pymongo.results import UpdateResult
 
@@ -23,11 +22,17 @@ async def release_count() -> int:
     return analytics.total_releases
 
 
-async def recently_updated(count=5):
+async def recently_updated(count=5) -> list[Package]:
     updated = await Package.find_all().sort(-Package.last_updated).limit(count).to_list()
     return updated
 
-async def package_by_name(name: str) -> Package:
+
+async def package_by_name(name: str) -> Optional[Package]:
+    if not name:
+        return None
+
+    name = name.lower().strip()
+
     package = await Package.find_one(Package.id == name)
     return package
 
