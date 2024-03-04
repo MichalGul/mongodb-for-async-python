@@ -45,6 +45,7 @@ async def configure_db():
 
 @api.get('/hello', include_in_schema=False)
 def index(request: Request):
+    print("AAASDAWDAWDWA")
     return templates.TemplateResponse('index.html', {"name": "The app!", "request": request})
 
 

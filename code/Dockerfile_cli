@@ -1,0 +1,17 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY ./app .
+
+RUN pip install -r requirements.txt
+
+ENV MONGO_INITDB_ROOT_USERNAME=user
+ENV MONGO_INITDB_ROOT_PASSWORD=password
+ENV DATABASE_NAME=pypi
+ENV AUTH_SOURCE=admin
+ENV ADDRESS=mongo_db
+ENV PORT=27017
+
+
+CMD ["python", "speedy_cli.py"]

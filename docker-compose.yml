@@ -21,6 +21,28 @@ services:
     networks:
       - app-network
 
+  pypi_cli:
+    image: pypi_app:v1
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=user
+      - MONGO_INITDB_ROOT_PASSWORD=password
+      - DATABASE_NAME=pypi
+      - AUTH_SOURCE=admin
+      - ADDRESS=mongo_db
+      - PORT=27017
+    networks:
+      - app-network
+    volumes:
+      # - db_data:/data/db
+      #or use bind to have data in given path in source
+      - type: bind
+        source: ./code/app
+        target: /app
+    depends_on:
+      - mongo_db
+
+
+
 networks:
   app-network:
 

@@ -3,7 +3,7 @@ from typing import Optional
 
 from pymongo.results import UpdateResult
 
-from models.package import Package, Release
+from models.package import Package, Release, PackageTopLevelOnly
 from models.release_analytisc import ReleaseAnalytics
 
 from beanie.odm.operators.update import array
@@ -27,14 +27,19 @@ async def recently_updated(count=5) -> list[Package]:
     return updated
 
 
-async def package_by_name(name: str) -> Optional[Package]:
+async def package_by_name(name: str, summary_only: bool = False) -> Optional[Package] | Optional[PackageTopLevelOnly]:
     if not name:
         return None
 
     name = name.lower().strip()
 
-    package = await Package.find_one(Package.id == name)
-    return package
+    query = Package.find_one(Package.id == name)
+
+    if not summary_only:
+        return await query
+    else:
+        return await query.project(PackageTopLevelOnly)
+
 
 
 async def packages_with_version(major: int, minor: int, build: int) -> int:
