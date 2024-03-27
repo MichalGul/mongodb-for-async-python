@@ -17,9 +17,11 @@ async def main():
     AUTH_SOURCE = os.getenv("AUTH_SOURCE")
     ADDRESS = os.getenv("ADDRESS")
     PORT = os.getenv("PORT")
+    USE_SSL = True if os.getenv("USE_SSL") == "true" else False
 
-    await mongo_setup.init_connection(address=ADDRESS, port=PORT, db_name=DATABASE_NAME,
-                                      user=MONGO_INITDB_ROOT_USERNAME, password=MONGO_INITDB_ROOT_PASSWORD,
+    await mongo_setup.init_connection(database=DATABASE_NAME, server=ADDRESS, port=int(PORT),
+                                      username=MONGO_INITDB_ROOT_USERNAME, password=MONGO_INITDB_ROOT_PASSWORD,
+                                      use_ssl=USE_SSL,
                                       auth_source=AUTH_SOURCE)
     print_header()
 

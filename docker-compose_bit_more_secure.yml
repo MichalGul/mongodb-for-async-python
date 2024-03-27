@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  mongo_db:
+    image: custom_mongodb:v1
+    container_name: custom_mongodb
+    ports:
+      - "27099:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=user
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes:
+      # - db_data:/data/db
+      #or use bind to have data in given path in source
+      - type: bind
+        source: ./data
+        target: /data/db
+      - type: bind
+        source: ./mongo_settings/mongod.conf
+        target: /etc/mongod.conf
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks:
+      - app-network
+    entrypoint: ["mongod", "--auth", "--config", "/etc/mongod.conf"]
+
+
+networks:
+  app-network:
+
+
+volumes:
+  db_data:
+    driver: local

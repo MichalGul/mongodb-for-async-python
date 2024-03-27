@@ -30,6 +30,8 @@ services:
       - AUTH_SOURCE=admin
       - ADDRESS=mongo_db
       - PORT=27017
+    ports:
+      - "8000:80"
     networks:
       - app-network
     volumes:

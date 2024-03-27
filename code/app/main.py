@@ -38,8 +38,12 @@ async def configure_db():
     AUTH_SOURCE = os.getenv("AUTH_SOURCE")
     ADDRESS = os.getenv("ADDRESS")
     PORT = os.getenv("PORT")
+    USE_SSL = True if os.getenv("USE_SSL") == "true" else False
 
-    await mongo_setup.init_connection(ADDRESS, PORT, DATABASE_NAME, MONGO_INITDB_ROOT_USERNAME, MONGO_INITDB_ROOT_PASSWORD, AUTH_SOURCE)
+    await mongo_setup.init_connection(database=DATABASE_NAME, server=ADDRESS, port=int(PORT),
+                                      username=MONGO_INITDB_ROOT_USERNAME, password=MONGO_INITDB_ROOT_PASSWORD,
+                                      use_ssl=USE_SSL,
+                                      auth_source=AUTH_SOURCE)
     print("Connected to the MongoDB database!")
 
 

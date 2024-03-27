@@ -37,6 +37,11 @@ cat mongodb-cert.key mongodb-cert.crt > mongodb.pem
 # https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/
 cd ~/
 
+# newest version 7
+curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | \
+   sudo gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg \
+   --dearmor
+
 curl -fsSL https://pgp.mongodb.com/server-6.0.asc | \
    sudo gpg -o /usr/share/keyrings/mongodb-server-6.0.gpg \
    --dearmor
@@ -44,7 +49,10 @@ curl -fsSL https://pgp.mongodb.com/server-6.0.asc | \
 # ONLY if the above fails, try these two commands.
 apt-get install gnupg
 
+# 6 version
 echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-6.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+# 7 version
+echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
 apt update
 apt-get install -y mongodb-org
 
@@ -59,11 +67,11 @@ mongosh --host VPN_IP --tls --tlsAllowInvalidCertificates --port 5621
 
 # Once logged in, create an admin user, then set the security in the mongodb.conf file.
 use admin
-db.createUser( { user: "MONGODB_USER", pwd: "MONGODB_PASSWORD", roles: [ "userAdminAnyDatabase", "readWriteAnyDatabase", "dbAdminAnyDatabase", "clusterAdmin" ] } )
+db.createUser( { user: "user_admin", pwd: "password", roles: [ "userAdminAnyDatabase", "readWriteAnyDatabase", "dbAdminAnyDatabase", "clusterAdmin" ] } )
 
 # Test user (VPN IP for DB server is 10.124.0.2)
 # This should work:
-mongosh --host 10.124.0.2 --tls --tlsAllowInvalidCertificates --port 5621 -u MONGODB_USER -p MONGODB_PASSWORD --authenticationDatabase admin
+mongosh --host 10.0.2.15 --tls --tlsAllowInvalidCertificates --port 5621 -u user_admin -p password --authenticationDatabase admin
 show dbs
 
 # This should fail:
